@@ -3,7 +3,9 @@ package com.example.practica_api_verveza.services;
 import com.example.practica_api_verveza.model.Beer;
 import com.example.practica_api_verveza.model.BeerStyle;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.util.StringUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -104,6 +106,33 @@ public class BeerServiceImpl implements BeerService {
     @Override
     public void deleteById(UUID beerId) {
         beerMap.remove(beerId);
+    }
+
+    @Override
+    public void patchBeerId(UUID beerId, Beer beer) {
+
+        Beer existing = beerMap.get(beerId);
+
+        if(StringUtils.hasText(beer.getBeerName())){
+            existing.setBeerName(beer.getBeerName());
+        }
+
+        if(beer.getBeerStyle() !=null){
+            existing.setBeerStyle(beer.getBeerStyle());
+        }
+
+        if(beer.getQuantityOnHand() !=null){
+            existing.setQuantityOnHand(beer.getQuantityOnHand());
+        }
+
+        if(beer.getUpc() !=null){
+            existing.setUpc(beer.getUpc());
+        }
+
+        if(beer.getPrice() !=null){
+            existing.setPrice(beer.getPrice());
+        }
+
     }
 }
 
