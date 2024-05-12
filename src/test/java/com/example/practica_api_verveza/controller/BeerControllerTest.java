@@ -3,6 +3,8 @@ package com.example.practica_api_verveza.controller;
 import com.example.practica_api_verveza.model.Beer;
 import com.example.practica_api_verveza.services.BeerService;
 import com.example.practica_api_verveza.services.BeerServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,11 +32,23 @@ class BeerControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    //mapea, combierte de json a objeto y viceversa
+    @Autowired
+    ObjectMapper objectMapper;
+
     @MockBean
     BeerService beerService;
 
+
     BeerServiceImpl beerServiceImpl = new BeerServiceImpl();
 
+
+    @Test
+    void testCreateNewBeer() throws JsonProcessingException {
+        Beer beer = beerServiceImpl.listBeers().get(1);
+        System.out.println(objectMapper.writeValueAsString(beer));
+
+    }
 
     @Test
     void getBeerById() throws Exception {
