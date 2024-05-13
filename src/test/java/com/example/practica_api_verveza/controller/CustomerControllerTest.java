@@ -42,7 +42,8 @@ public class CustomerControllerTest {
     void testCreateNewCustomer() throws Exception {
 
         Customer customer = customerServiceImpl.listCustomers().get(0);
-        customer.setCustomerName("yo");
+        customer.setId(null);
+        customer.setVersion(null);
 
         given(customerService.saveNewCustomer(any(Customer.class))).willReturn(customerServiceImpl.listCustomers().get(1));
 
