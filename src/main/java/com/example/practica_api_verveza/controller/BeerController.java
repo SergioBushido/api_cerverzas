@@ -1,10 +1,7 @@
 package com.example.practica_api_verveza.controller;
 
-import com.example.practica_api_verveza.model.Beer;
+import com.example.practica_api_verveza.model.BeerDTO;
 import com.example.practica_api_verveza.services.BeerService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -26,7 +23,7 @@ public class BeerController {
     private final BeerService beerService;
 
     @PatchMapping(BEER_PATH_ID)
-    public ResponseEntity updateBeerPatchById(@PathVariable("beerId")UUID beerId, @RequestBody Beer beer){
+    public ResponseEntity updateBeerPatchById(@PathVariable("beerId")UUID beerId, @RequestBody BeerDTO beer){
 
         beerService.patchBeerById(beerId, beer);
 
@@ -42,7 +39,7 @@ public class BeerController {
     }
 
     @PutMapping(BEER_PATH_ID)
-    public ResponseEntity updateById(@PathVariable("beerId")UUID beerId, @RequestBody Beer beer){
+    public ResponseEntity updateById(@PathVariable("beerId")UUID beerId, @RequestBody BeerDTO beer){
 
         beerService.updateBeerById(beerId, beer);
 
@@ -50,9 +47,9 @@ public class BeerController {
     }
 
     @PostMapping(BEER_PATH)
-    public ResponseEntity handlePost(@RequestBody Beer beer){
+    public ResponseEntity handlePost(@RequestBody BeerDTO beer){
 
-        Beer savedBeer = beerService.saveNewBeer(beer);
+        BeerDTO savedBeer = beerService.saveNewBeer(beer);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", BEER_PATH + "/" + savedBeer.getId().toString());
@@ -61,7 +58,7 @@ public class BeerController {
     }
 
     @GetMapping(value = BEER_PATH)
-    public List<Beer> listBeers(){
+    public List<BeerDTO> listBeers(){
         return beerService.listBeers();
     }
 
@@ -72,7 +69,7 @@ public class BeerController {
     }
 
     @GetMapping(value = BEER_PATH_ID)
-    public Beer getBeerById(@PathVariable("beerId") UUID beerId){
+    public BeerDTO getBeerById(@PathVariable("beerId") UUID beerId){
 
         log.debug("Get Beer by Id - in controller");
 

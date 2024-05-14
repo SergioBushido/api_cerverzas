@@ -5,18 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.rmi.server.UID;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class Customer {
+public class CustomerDTO {
 
-    private String name;
     private UUID id;
+    private String name;
     private Integer version;
     private LocalDateTime createdDate;
     private LocalDateTime updateDate;
