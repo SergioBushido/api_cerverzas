@@ -15,10 +15,9 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Customer {
 
+    private String name;
     private UUID id;
-    private String customerName;
-    private String version;
-    private LocalDateTime createDate;
-    private LocalDateTime lastModifiedDate;
-
+    private Integer version;
+    private LocalDateTime createdDate;
+    private LocalDateTime updateDate;
 }

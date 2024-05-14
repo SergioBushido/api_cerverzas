@@ -18,61 +18,65 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/beer")
-@Tag(name = "Beer Controller", description = "API for managing beers")
 public class BeerController {
 
     public static final String BEER_PATH = "/api/v1/beer";
-    public static final String BEER_PATH_ID = "/{beerId}";
+    public static final String BEER_PATH_ID = BEER_PATH + "/{beerId}";
+
     private final BeerService beerService;
 
-    @Operation(summary = "Partially update a beer by ID")
     @PatchMapping(BEER_PATH_ID)
-    public ResponseEntity<Void> updatePatchById(
-            @Parameter(description = "ID of the beer to update") @PathVariable UUID beerId,
-            @Parameter(description = "Updated beer information") @RequestBody Beer beer) {
+    public ResponseEntity updateBeerPatchById(@PathVariable("beerId")UUID beerId, @RequestBody Beer beer){
+
         beerService.patchBeerById(beerId, beer);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @Operation(summary = "Delete a beer by ID")
     @DeleteMapping(BEER_PATH_ID)
-    public ResponseEntity<Void> deleteById(
-            @Parameter(description = "ID of the beer to delete") @PathVariable UUID beerId) {
+    public ResponseEntity deleteById(@PathVariable("beerId") UUID beerId){
+
         beerService.deleteById(beerId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @Operation(summary = "Update a beer by ID")
     @PutMapping(BEER_PATH_ID)
-    public ResponseEntity<Void> updateBeer(
-            @Parameter(description = "ID of the beer to update") @PathVariable UUID beerId,
-            @Parameter(description = "Updated beer information") @RequestBody Beer beer) {
+    public ResponseEntity updateById(@PathVariable("beerId")UUID beerId, @RequestBody Beer beer){
+
         beerService.updateBeerById(beerId, beer);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @Operation(summary = "Create a new beer")
-    @PostMapping
-    public ResponseEntity<Void> handlePost(
-            @Parameter(description = "Beer to create") @RequestBody Beer beer) {
+    @PostMapping(BEER_PATH)
+    public ResponseEntity handlePost(@RequestBody Beer beer){
+
         Beer savedBeer = beerService.saveNewBeer(beer);
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", BEER_PATH + "/" + savedBeer.getId().toString());
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+
+        return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Get a list of all beers")
-    @GetMapping
-    public List<Beer> getAllBeers() {
+    @GetMapping(value = BEER_PATH)
+    public List<Beer> listBeers(){
         return beerService.listBeers();
     }
 
-    @Operation(summary = "Get a beer by ID")
-    @GetMapping(BEER_PATH_ID)
-    public Beer getBeerById(
-            @Parameter(description = "ID of the beer to retrieve") @PathVariable("beerId") UUID beerId) {
-        log.debug("log desde controlador");
-        return beerService.getBeerById(beerId);
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity handleNotFoundException(){
+        System.out.println("Esto viene del ExceptionHandler");
+        return ResponseEntity.notFound().build();
     }
+
+    @GetMapping(value = BEER_PATH_ID)
+    public Beer getBeerById(@PathVariable("beerId") UUID beerId){
+
+        log.debug("Get Beer by Id - in controller");
+
+        return beerService.getBeerById(beerId).orElseThrow(NotFoundException::new);
+    }
+
 }

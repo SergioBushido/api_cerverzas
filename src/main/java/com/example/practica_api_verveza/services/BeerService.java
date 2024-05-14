@@ -4,6 +4,7 @@ package com.example.practica_api_verveza.services;
 import com.example.practica_api_verveza.model.Beer;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -13,7 +14,7 @@ public interface BeerService {
 
     List<Beer> listBeers();
 
-    Beer getBeerById(UUID id);
+    Optional<Beer> getBeerById(UUID id);
 
     Beer saveNewBeer(Beer beer);
 

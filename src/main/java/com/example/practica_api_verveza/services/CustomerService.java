@@ -4,16 +4,20 @@ import com.example.practica_api_verveza.model.Beer;
 import com.example.practica_api_verveza.model.Customer;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface CustomerService {
-    List<Customer> listCustomers();
-    Customer getCostumerById(UUID id);
+
+    Optional<Customer> getCustomerById(UUID uuid);
+
+    List<Customer> getAllCustomers();
+
     Customer saveNewCustomer(Customer customer);
 
-    void updatedCustomerId(UUID custumerId, Customer customer);
+    void updateCustomerById(UUID customerId, Customer customer);
 
-    void deleteById(UUID customerId);
+    void deleteCustomerById(UUID customerId);
 
-    void patchCustomerId(UUID customerId, Customer customer);
+    void patchCustomerById(UUID customerId, Customer customer);
 }
