@@ -1,10 +1,14 @@
 package com.example.practica_api_verveza.services;
 
+
 import com.example.practica_api_verveza.model.Beer;
 
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Created by jt, Spring Framework Guru.
+ */
 public interface BeerService {
 
     List<Beer> listBeers();
@@ -13,9 +17,9 @@ public interface BeerService {
 
     Beer saveNewBeer(Beer beer);
 
-    void updatedBeerId(UUID beerId, Beer beer);
+    void updateBeerById(UUID beerId, Beer beer);
 
     void deleteById(UUID beerId);
 
-    void patchBeerId(UUID beerId, Beer beer);
+    void patchBeerById(UUID beerId, Beer beer);
 }

@@ -1,6 +1,7 @@
 package com.example.practica_api_verveza.controller;
 
 
+import com.example.practica_api_verveza.model.Beer;
 import com.example.practica_api_verveza.model.Customer;
 import com.example.practica_api_verveza.services.CustomerService;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,14 @@ import java.util.UUID;
 public class CustomerController {
 
     private final CustomerService customerService;
+
+    @PatchMapping("{customerId}")
+    public ResponseEntity updatePatchById(@PathVariable UUID customerId,@RequestBody Customer customer) {
+
+        customerService.patchCustomerId(customerId, customer);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 
     @DeleteMapping("{customerId}")
     public ResponseEntity deleteById(@PathVariable UUID customerId) {
