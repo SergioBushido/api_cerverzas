@@ -1,9 +1,10 @@
 package com.example.practica_api_verveza.controller;
 
-
-import com.example.practica_api_verveza.model.Beer;
 import com.example.practica_api_verveza.model.Customer;
 import com.example.practica_api_verveza.services.CustomerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -18,51 +19,57 @@ import java.util.UUID;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/customer")
+@Tag(name = "Customer Controller", description = "API for managing customers")
 public class CustomerController {
 
     private final CustomerService customerService;
 
+    @Operation(summary = "Partially update a customer by ID")
     @PatchMapping("{customerId}")
-    public ResponseEntity updatePatchById(@PathVariable UUID customerId,@RequestBody Customer customer) {
-
+    public ResponseEntity<Void> updatePatchById(
+            @Parameter(description = "ID of the customer to update") @PathVariable UUID customerId,
+            @Parameter(description = "Updated customer information") @RequestBody Customer customer) {
         customerService.patchCustomerId(customerId, customer);
-
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @Operation(summary = "Delete a customer by ID")
     @DeleteMapping("{customerId}")
-    public ResponseEntity deleteById(@PathVariable UUID customerId) {
-
+    public ResponseEntity<Void> deleteById(
+            @Parameter(description = "ID of the customer to delete") @PathVariable UUID customerId) {
         customerService.deleteById(customerId);
-
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
-
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping({"{customerId}"})
-    public ResponseEntity updatedCustomer(@PathVariable UUID customerId, @RequestBody Customer customer) {
-
-       customerService.updatedCustomerId(customerId, customer);
-
-       return new ResponseEntity(HttpStatus.NO_CONTENT);
+    @Operation(summary = "Update a customer by ID")
+    @PutMapping("{customerId}")
+    public ResponseEntity<Void> updatedCustomer(
+            @Parameter(description = "ID of the customer to update") @PathVariable UUID customerId,
+            @Parameter(description = "Updated customer information") @RequestBody Customer customer) {
+        customerService.updatedCustomerId(customerId, customer);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @RequestMapping
-    public ResponseEntity handlePost(@RequestBody Customer customer) {
-        Customer savedCustumer = customerService.saveNewCustomer(customer);
-
+    @Operation(summary = "Create a new customer")
+    @PostMapping
+    public ResponseEntity<Void> handlePost(
+            @Parameter(description = "Customer to create") @RequestBody Customer customer) {
+        Customer savedCustomer = customerService.saveNewCustomer(customer);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location"," /api/v1/customer/"+savedCustumer.getId().toString());
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        headers.add("Location", "/api/v1/customer/" + savedCustomer.getId().toString());
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @Operation(summary = "Get a list of all customers")
+    @GetMapping
     public List<Customer> listCustomers() {
         return customerService.listCustomers();
     }
 
-    @RequestMapping(value = "{customerId}", method = RequestMethod.GET)
-    public Customer getCustomerById(@PathVariable("customerId") UUID customerId) {
-      return   customerService.getCostumerById(customerId);
+    @Operation(summary = "Get a customer by ID")
+    @GetMapping("{customerId}")
+    public Customer getCustomerById(
+            @Parameter(description = "ID of the customer to retrieve") @PathVariable("customerId") UUID customerId) {
+        return customerService.getCostumerById(customerId);
     }
 }
