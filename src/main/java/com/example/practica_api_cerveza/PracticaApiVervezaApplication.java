@@ -1,4 +1,4 @@
-package com.example.practica_api_verveza;
+package com.example.practica_api_cerveza;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
