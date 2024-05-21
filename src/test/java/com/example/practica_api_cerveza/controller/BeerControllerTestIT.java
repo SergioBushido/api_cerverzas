@@ -153,7 +153,7 @@ class BeerControllerTestIT {
     void testListBeers(){
         List<BeerDTO> dtos = beerController.listBeers();
 
-        assertThat(dtos.size()).isEqualTo(3);
+        assertThat(dtos.size()).isEqualTo(2413);
     }
 
     //Junit utiliza su propio orden de ejecución, entonces primero borra la lista
