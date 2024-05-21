@@ -12,12 +12,10 @@ import java.util.UUID;
 @Builder
 @Data
 public class BeerDTO {
-
     private UUID id;
     private Integer version;
 
-    //si ponemos validaciones aqui hay que poner @validated en el controller
-    @NotBlank//para no meter caracteres en blanco
+    @NotBlank
     @NotNull
     private String beerName;
 
@@ -31,7 +29,7 @@ public class BeerDTO {
 
     @NotNull
     private BigDecimal price;
-    private LocalDateTime createDate;
+    private LocalDateTime createdDate;
     private LocalDateTime updateDate;
 
 }
