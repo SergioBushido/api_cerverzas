@@ -24,31 +24,43 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
+import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-class BeerControllerTestIT {
+class BeerControllerIT {
     @Autowired
     BeerController beerController;
-    @Autowired
-    BeerRepository beerRepository;
-    @Autowired
-    private BeerMapper beerMapper;
 
     @Autowired
-    WebApplicationContext wac;
+    BeerRepository beerRepository;
+
+    @Autowired
+    BeerMapper beerMapper;
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    WebApplicationContext wac;
 
     MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    }
+
+    @Test
+    void tesListBeersByName() throws Exception {
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerName", "IPA"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(2413)));
     }
 
     @Test
@@ -66,35 +78,34 @@ class BeerControllerTestIT {
 
     }
 
-
     @Test
-    void testDeleteByIDNotFound(){
+    void testDeleteByIDNotFound() {
         assertThrows(NotFoundException.class, () -> {
             beerController.deleteById(UUID.randomUUID());
         });
     }
 
-
     @Rollback
     @Transactional
     @Test
-    void deleByIdFound(){
+    void deleteByIdFound() {
         Beer beer = beerRepository.findAll().get(0);
 
         ResponseEntity responseEntity = beerController.deleteById(beer.getId());
-
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
+
         assertThat(beerRepository.findById(beer.getId()).isEmpty());
-
-
     }
 
     @Test
-    void testUpdateNotFound(){
-        assertThrows(NotFoundException.class, ()->{
+    void testUpdateNotFound() {
+        assertThrows(NotFoundException.class, () -> {
             beerController.updateById(UUID.randomUUID(), BeerDTO.builder().build());
         });
     }
+
+    @Rollback
+    @Transactional
     @Test
     void updateExistingBeer() {
         Beer beer = beerRepository.findAll().get(0);
@@ -111,13 +122,12 @@ class BeerControllerTestIT {
         assertThat(updatedBeer.getBeerName()).isEqualTo(beerName);
     }
 
-
     @Rollback
     @Transactional
     @Test
-    void saveNewBeerTest(){
+    void saveNewBeerTest() {
         BeerDTO beerDTO = BeerDTO.builder()
-                .beerName("New beer")
+                .beerName("New Beer")
                 .build();
 
         ResponseEntity responseEntity = beerController.handlePost(beerDTO);
@@ -126,21 +136,21 @@ class BeerControllerTestIT {
         assertThat(responseEntity.getHeaders().getLocation()).isNotNull();
 
         String[] locationUUID = responseEntity.getHeaders().getLocation().getPath().split("/");
-    //locationUUID = ["", "api", "v1", "beer", "123e4567-e89b-12d3-a456-426614174000"]
         UUID savedUUID = UUID.fromString(locationUUID[4]);
 
         Beer beer = beerRepository.findById(savedUUID).get();
         assertThat(beer).isNotNull();
     }
+
     @Test
-    void testBeerIdNotFound(){
-        assertThrows(NotFoundException.class, ()->{
+    void testBeerIdNotFound() {
+        assertThrows(NotFoundException.class, () -> {
             beerController.getBeerById(UUID.randomUUID());
         });
     }
 
     @Test
-    void testGetById(){
+    void testGetById() {
         Beer beer = beerRepository.findAll().get(0);
 
         BeerDTO dto = beerController.getBeerById(beer.getId());
@@ -148,22 +158,20 @@ class BeerControllerTestIT {
         assertThat(dto).isNotNull();
     }
 
-
     @Test
-    void testListBeers(){
-        List<BeerDTO> dtos = beerController.listBeers();
+    void testListBeers() {
+        List<BeerDTO> dtos = beerController.listBeers(null);
 
         assertThat(dtos.size()).isEqualTo(2413);
     }
 
-    //Junit utiliza su propio orden de ejecución, entonces primero borra la lista
-    //por eso hay que poner estas notaciones...para que no falle el primer test
     @Rollback
     @Transactional
     @Test
-    void testEmptyList(){
+    void testEmptyList() {
         beerRepository.deleteAll();
-        List<BeerDTO> dtos = beerController.listBeers();
+        List<BeerDTO> dtos = beerController.listBeers(null);
+
         assertThat(dtos.size()).isEqualTo(0);
     }
 }

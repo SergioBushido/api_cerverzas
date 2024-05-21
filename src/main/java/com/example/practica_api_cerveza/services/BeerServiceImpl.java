@@ -10,9 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
-/**
- * Created by jt, Spring Framework Guru.
- */
+
 @Slf4j
 @Service
 public class BeerServiceImpl implements BeerService {
@@ -30,7 +28,7 @@ public class BeerServiceImpl implements BeerService {
                 .upc("12356")
                 .price(new BigDecimal("12.99"))
                 .quantityOnHand(122)
-                .createDate(LocalDateTime.now())
+                .createdDate(LocalDateTime.now())
                 .updateDate(LocalDateTime.now())
                 .build();
 
@@ -42,7 +40,7 @@ public class BeerServiceImpl implements BeerService {
                 .upc("12356222")
                 .price(new BigDecimal("11.99"))
                 .quantityOnHand(392)
-                .createDate(LocalDateTime.now())
+                .createdDate(LocalDateTime.now())
                 .updateDate(LocalDateTime.now())
                 .build();
 
@@ -54,7 +52,7 @@ public class BeerServiceImpl implements BeerService {
                 .upc("12356")
                 .price(new BigDecimal("13.99"))
                 .quantityOnHand(144)
-                .createDate(LocalDateTime.now())
+                .createdDate(LocalDateTime.now())
                 .updateDate(LocalDateTime.now())
                 .build();
 
@@ -86,7 +84,8 @@ public class BeerServiceImpl implements BeerService {
         if (StringUtils.hasText(beer.getUpc())) {
             existing.setUpc(beer.getUpc());
         }
-        return null;
+
+        return Optional.of(existing);
     }
 
     @Override
@@ -107,7 +106,7 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public List<BeerDTO> listBeers(){
+    public List<BeerDTO> listBeers(String beerName){
         return new ArrayList<>(beerMap.values());
     }
 
@@ -125,7 +124,7 @@ public class BeerServiceImpl implements BeerService {
         BeerDTO savedBeer = BeerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
-                .createDate(LocalDateTime.now())
+                .createdDate(LocalDateTime.now())
                 .updateDate(LocalDateTime.now())
                 .beerName(beer.getBeerName())
                 .beerStyle(beer.getBeerStyle())

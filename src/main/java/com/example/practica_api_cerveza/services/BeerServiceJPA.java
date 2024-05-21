@@ -1,5 +1,6 @@
 package com.example.practica_api_cerveza.services;
 
+import com.example.practica_api_cerveza.entities.Beer;
 import com.example.practica_api_cerveza.mappers.BeerMapper;
 import com.example.practica_api_cerveza.model.BeerDTO;
 import com.example.practica_api_cerveza.repositories.BeerRepository;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,7 +24,7 @@ public class BeerServiceJPA implements BeerService {
     private final BeerMapper beerMapper;
 
     @Override
-    public List<BeerDTO> listBeers() {
+    public List<BeerDTO> listBeers(String beerName) {
         return beerRepository.findAll()
                 .stream()
                 .map(beerMapper::beerToBeerDto)

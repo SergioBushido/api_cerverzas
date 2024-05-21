@@ -52,9 +52,9 @@ public class Beer {
     @NotNull
     private BigDecimal price;
 
-    @CreationTimestamp//pone fecha al crear la tabla
+    @CreationTimestamp
     private LocalDateTime createdDate;
 
-    @UpdateTimestamp//pone fecha al crear la tabla
+    @UpdateTimestamp
     private LocalDateTime updateDate;
 }
