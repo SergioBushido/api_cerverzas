@@ -23,60 +23,51 @@ public class BootstrapData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         loadBeerData();
-        loadCustumerData();
+        loadCustomerData();
     }
 
     private void loadBeerData() {
-
-        if(beerRepository.count() == 0){
-
+        if (beerRepository.count() == 0){
             Beer beer1 = Beer.builder()
-                    .id(UUID.randomUUID())
-                    .version(1)
                     .beerName("Galaxy Cat")
                     .beerStyle(BeerStyle.PALE_ALE)
                     .upc("12356")
                     .price(new BigDecimal("12.99"))
                     .quantityOnHand(122)
-                    .createDate(LocalDateTime.now())
+                    .createdDate(LocalDateTime.now())
                     .updateDate(LocalDateTime.now())
                     .build();
 
             Beer beer2 = Beer.builder()
-                    .id(UUID.randomUUID())
-                    .version(1)
                     .beerName("Crank")
                     .beerStyle(BeerStyle.PALE_ALE)
                     .upc("12356222")
                     .price(new BigDecimal("11.99"))
                     .quantityOnHand(392)
-                    .createDate(LocalDateTime.now())
+                    .createdDate(LocalDateTime.now())
                     .updateDate(LocalDateTime.now())
                     .build();
 
             Beer beer3 = Beer.builder()
-                    .id(UUID.randomUUID())
-                    .version(1)
                     .beerName("Sunshine City")
                     .beerStyle(BeerStyle.IPA)
                     .upc("12356")
                     .price(new BigDecimal("13.99"))
                     .quantityOnHand(144)
-                    .createDate(LocalDateTime.now())
+                    .createdDate(LocalDateTime.now())
                     .updateDate(LocalDateTime.now())
                     .build();
 
             beerRepository.save(beer1);
             beerRepository.save(beer2);
             beerRepository.save(beer3);
-
         }
 
     }
 
-    private void loadCustumerData() {
+    private void loadCustomerData() {
 
-        if(customerRepository.count() == 0){
+        if (customerRepository.count() == 0) {
             Customer customer1 = Customer.builder()
                     .id(UUID.randomUUID())
                     .name("Customer 1")
@@ -102,9 +93,7 @@ public class BootstrapData implements CommandLineRunner {
                     .build();
 
             customerRepository.saveAll(Arrays.asList(customer1, customer2, customer3));
-
         }
-
 
     }
 
