@@ -3,24 +3,23 @@ package com.example.practica_api_cerveza.services;
 
 import com.example.practica_api_cerveza.model.BeerDTO;
 import com.example.practica_api_cerveza.model.BeerStyle;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-/**
- * Created by jt, Spring Framework Guru.
- */public interface BeerService {
 
-    List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory);
+ public interface BeerService {
 
-    Optional<BeerDTO> getBeerById(UUID id);
+ Page<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory, Integer pageNumber, Integer pageSize);
 
-    BeerDTO saveNewBeer(BeerDTO beer);
+ Optional<BeerDTO> getBeerById(UUID id);
 
-    Optional<BeerDTO> updateBeerById(UUID beerId, BeerDTO beer);
+ BeerDTO saveNewBeer(BeerDTO beer);
 
-    Boolean deleteById(UUID beerId);
+ Optional<BeerDTO> updateBeerById(UUID beerId, BeerDTO beer);
 
-    Optional<BeerDTO> patchBeerById(UUID beerId, BeerDTO beer);
-}
+ Boolean deleteById(UUID beerId);
+
+ Optional<BeerDTO> patchBeerById(UUID beerId, BeerDTO beer);
+ }
