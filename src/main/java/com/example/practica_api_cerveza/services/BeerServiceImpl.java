@@ -9,8 +9,6 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
-
-
 @Slf4j
 @Service
 public class BeerServiceImpl implements BeerService {
@@ -106,7 +104,7 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public List<BeerDTO> listBeers(String beerName){
+    public List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory){
         return new ArrayList<>(beerMap.values());
     }
 

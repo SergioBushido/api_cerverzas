@@ -1,6 +1,7 @@
 package com.example.practica_api_cerveza.controller;
 
 import com.example.practica_api_cerveza.model.BeerDTO;
+import com.example.practica_api_cerveza.model.BeerStyle;
 import com.example.practica_api_cerveza.services.BeerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -63,8 +63,10 @@ public class BeerController {
     }
 
     @GetMapping(value = BEER_PATH)
-    public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName){
-        return beerService.listBeers(beerName);
+    public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName,
+                                   @RequestParam(required = false) BeerStyle beerStyle,
+                                   @RequestParam(required = false) Boolean showInventory){
+        return beerService.listBeers(beerName, beerStyle, showInventory);
     }
 
 

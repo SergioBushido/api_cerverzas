@@ -17,7 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-
 @DataJpaTest
 @Import({BootstrapData.class, BeerCsvServiceImpl.class})
 class BeerRepositoryTest {

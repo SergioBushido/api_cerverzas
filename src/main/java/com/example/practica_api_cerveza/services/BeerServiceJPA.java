@@ -3,6 +3,7 @@ package com.example.practica_api_cerveza.services;
 import com.example.practica_api_cerveza.entities.Beer;
 import com.example.practica_api_cerveza.mappers.BeerMapper;
 import com.example.practica_api_cerveza.model.BeerDTO;
+import com.example.practica_api_cerveza.model.BeerStyle;
 import com.example.practica_api_cerveza.repositories.BeerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -15,7 +16,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-
 @Service
 @Primary
 @RequiredArgsConstructor
@@ -24,11 +24,39 @@ public class BeerServiceJPA implements BeerService {
     private final BeerMapper beerMapper;
 
     @Override
-    public List<BeerDTO> listBeers(String beerName) {
-        return beerRepository.findAll()
-                .stream()
+    public List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory) {
+
+        List<Beer> beerList;
+
+        if(StringUtils.hasText(beerName) && beerStyle == null) {
+            beerList = listBeersByName(beerName);
+        } else if (!StringUtils.hasText(beerName) && beerStyle != null){
+            beerList = listBeersByStyle(beerStyle);
+        } else if (StringUtils.hasText(beerName) && beerStyle != null){
+            beerList = listBeersByNameAndStyle(beerName, beerStyle);
+        } else {
+            beerList = beerRepository.findAll();
+        }
+
+        if (showInventory != null && !showInventory) {
+            beerList.forEach(beer -> beer.setQuantityOnHand(null));
+        }
+
+        return beerList.stream()
                 .map(beerMapper::beerToBeerDto)
                 .collect(Collectors.toList());
+    }
+
+    private List<Beer> listBeersByNameAndStyle(String beerName, BeerStyle beerStyle) {
+        return beerRepository.findAllByBeerNameIsLikeIgnoreCaseAndBeerStyle("%" + beerName + "%", beerStyle);
+    }
+
+    public List<Beer> listBeersByStyle(BeerStyle beerStyle) {
+        return beerRepository.findAllByBeerStyle(beerStyle);
+    }
+
+    public List<Beer> listBeersByName(String beerName){
+        return beerRepository.findAllByBeerNameIsLikeIgnoreCase("%" + beerName + "%");
     }
 
     @Override

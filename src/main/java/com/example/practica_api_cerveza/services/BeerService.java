@@ -2,6 +2,7 @@ package com.example.practica_api_cerveza.services;
 
 
 import com.example.practica_api_cerveza.model.BeerDTO;
+import com.example.practica_api_cerveza.model.BeerStyle;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,10 +10,9 @@ import java.util.UUID;
 
 /**
  * Created by jt, Spring Framework Guru.
- */
-public interface BeerService {
+ */public interface BeerService {
 
-    List<BeerDTO> listBeers(String beerName);
+    List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory);
 
     Optional<BeerDTO> getBeerById(UUID id);
 
