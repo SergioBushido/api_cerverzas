@@ -29,6 +29,16 @@ DROP TABLE IF EXISTS beer_order;
 DROP TABLE IF EXISTS beer;
 DROP TABLE IF EXISTS customer;
 
+-- V1__create_user_table.sql
+CREATE TABLE user (
+                      id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                      username VARCHAR(50) NOT NULL,
+                      email VARCHAR(100) NOT NULL,
+                      password VARCHAR(255) NOT NULL,
+                      role VARCHAR(50) NOT NULL
+);
+
+
 -- Crear nuevamente las tablas
 CREATE TABLE beer (
                       id VARCHAR(36) NOT NULL,
